@@ -100,5 +100,5 @@
       from sklearn.datasets import get_data_home
       print(get_data_home()) # 获取 SCIKIT_LEARN_DATA 路径
       ```
-  3. 原作博客  
-    - https://juejin.cn/user/237150240001639/posts
+- 原作其他博客  
+  https://juejin.cn/user/237150240001639/posts
