@@ -80,11 +80,11 @@
     在章节数据预处理中，需要加载泰坦尼克的相关数据  
     如果无法下载，可以尝试科学上网  
     或者按需加载仓库文件 `./data/titanic.csv`  
-    ```python
-    import pandas as pd
-    PATH = "../data/titanic.csv"
-    df = pd.read_csv(PATH)
-    ```
+      ```python
+      import pandas as pd
+      PATH = "../data/titanic.csv"
+      df = pd.read_csv(PATH)
+      ```
 
   2. `sklearn.datasets.fetch_california_housing`   
       在多个章节中，需要加载加利福尼亚房价的相关数据  
