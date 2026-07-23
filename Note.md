@@ -658,10 +658,10 @@ $$
 	用于解决分类问题，输出概率  
 	
 $$
-\begin{align}
+\begin{array}{r}
 P(y = 1 \mid x) & = \sigma (wx + b) \\ 
 & = \dfrac{1}{1+e^{-(wx+b)}}
-\end{align}
+\end{array}
 $$  
 
 2. 深度学习  
@@ -681,6 +681,670 @@ $$
 5. 循环训练迭代准确模型  
 
 几乎所有机器学习和深度学习模型，都是对上述基本范式的扩展和升级  
+
+# 3. 梯度下降
+
+## 本节内容
+1. 梯度下降核心地位
+2. 梯度数学原理
+3. 梯度公式推导
+4. 房价预测实例
+5. 学习率调优
+6. 优化器演进
+7. 最小批量梯度下降
+8. 核心总结
+
+## 模型训练
+以简单的线性回归为例  
+
+$$
+\hat{y} = wx + b
+$$
+
+- $w$ : weight 权重 / 斜率  
+- $b$ : basis 偏置 / 截距  
+
+**训练模型的本质**  
+- 是搜索最佳的 $w$ 和 $b$  
+
+> [!TIP]
+> 训练闭环  
+> 输入数据 → 输出预测 → 计算损失 → 计算梯度 → 更新参数
+
+用损失函数来度量预测值 $\hat{y}$ 与真实值 $y$ 之间的偏差  
+以均方差 (MSE) 为例  
+
+$$
+L = MSE = \frac1n \sum \limits _{i=1}^{n} (\hat{y_i} - y_i)^2
+$$
+
+**训练模型的目标**  
+- 实现最小损失函数  
+- 此时取得前述的最佳 $w$ 和 $b$    
+
+梯度下降 (Gradient Descent)   
+- 是一种自动调参的算法
+- 回答如何调参实现最小损失函数的问题
+
+## 数学基础
+两个关键数学概念:  
+1. 导数  
+	函数在某点的变化率
+2. 偏导数  
+	多变量函数的变化率
+
+### 导数
+导数 (Derivative)  
+- 是函数在某点的变化率
+- 说明函数值随自变量变化的趋势
+
+对于单变量函数 $f(x)$ 在 $x_0$ 处的函数定义为
+
+$$
+f'(x_0) = \lim \limits _{\triangle x \to 0} \cfrac{f(x_0 + \triangle x) - f(x_0)}{\triangle x}
+$$
+
+![](./materials/img0301Derivative.png)
+
+- 几何意义  
+	函数曲线在该点的切线斜率
+- $f'(x_0) > 0$  
+	 $f(x)$ 在 $x_0$ 处递增， $x$ 增大， $f(x)$ 增大  
+- $f'(x_0) = 0$  
+	 $f(x)$ 在 $x_0$ 处达到极值  
+- $f'(x_0) < 0$   
+	 $f(x)$ 在 $x_0$ 处递减， $x$ 增大， $f(x)$ 减小  
+
+### 偏导数
+偏导数 (partial derivative)  
+- 多变量函数的变化率
+- 说明每个参数对函数值的影响
+
+损失函数通常依赖多个参数  
+例如损失函数 $L(w,b)$ 取决与 $w$ 和 $b$   
+**需要固定其他变量不变，只对其中一个变量求导**  
+
+$$
+\begin{array}{l}
+对于函数 \quad f(x,y) = x^2 + 3xy + y^2 \\
+函数对 x 的偏导数 \quad \cfrac{\partial f}{\partial x} = 2x + 3y \quad (把 y 作 常数) \\
+函数对 y 的偏导数 \quad \cfrac{\partial f}{\partial y} = 3x + 2y \quad (把 x 作 常数) \\
+\end{array}
+$$
+
+## 核心原理
+根据导数和偏导数，可以理解梯度下降。  
+
+### 梯度
+**梯度 (Gradient)**  
+- 将所有变量的偏导数组合成的 **向量**  
+- 指向最陡上坡的方向  
+
+对于简单线性回归 $f(x) = wx + b$ 的损失函数 $L(w,b)$，梯度为  
+
+$$
+\nabla L(w,b) = (\cfrac{\partial L}{\partial w}, \cfrac{\partial L}{\partial b})
+$$
+
+如有更多参数 $\theta_1, \theta_2, \ldots, \theta_d$ 时，梯度为  
+
+$$
+\nabla L(\theta) = (\cfrac{\partial L}{\partial \theta_1}, \cfrac{\partial L}{\partial \theta_2}, \ldots ,\cfrac{\partial L}{\partial \theta_d})
+$$
+
+梯度的重要性质:  
+1. 梯度的 **方向**，是函数值增长最快的方向  
+2. 梯度的 **反方向**，是函数值下降最快的方向  
+
+### 迭代公式
+基于前述，梯度下降的参数更新公式为  
+
+$$
+\begin{array}{c}
+	\theta _{new} = \theta _{old} - \eta \nabla L(\theta _{old}) \\
+	\theta : = \theta - \eta \nabla L(\theta) \\
+\end{array}
+$$
+
+- $\theta_{old}$ : 当前位置
+- $\nabla L(\theta _{old})$ : 当前参数处的梯度
+- $\eta$ : 学习率 (Learning rate) 控制调参幅度
+- $-\eta \cdot \nabla L$ : 沿梯度反方向，按学习率调参一次
+- $:=$ : 计算机赋值号
+
+**为何减去梯度**  
+因为梯度指向函数值增长的方向,所以为实现损失函数最小化，需要取梯度反方向  
+
+**为何乘学习率**  
+通过学习率控制调参的幅度，避免幅度过大错过最优，避免幅度过小浪费时间  
+
+对于线性回归，展开参数更新公式得到
+
+$$
+\begin{array}{c}
+	w_{new} = w_{old} - \eta \cdot \cfrac{\partial L}{\partial w} \\
+	b_{new} = b_{old} - \eta \cdot \cfrac{\partial L}{\partial b} \\
+\end{array}
+$$
+
+## 代码实现
+
+### 问题设置
+使用房价预测作为演示
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+plt.rcParams['font.sans-serif'] = ['SimHei']
+plt.rcParams['axes.unicode_minus'] = False
+
+np.random.seed(42)	# 随机种子
+n_samples = 100 	# 抽样数量
+
+# 生成随机面积
+areas_m2 = np.random.uniform(90, 150, n_sample) # (100 个 90~150 平方米)
+
+# 转换为百平米，减少两个参数的量纲差异对学习率的影响
+areas = areas_m2 / 100
+
+# 生成房价
+prices = 250 * areas + 30 + np.random.randn(n_sample) * 15
+
+print(f"房屋数量: {len(areas)} 套")
+print(f"面积范围: {areas_m2.min():.1f} - {areas_m2.max():.1f} 平米 ({areas.min():.2f} - {areas.max():.2f} 百平米)")
+print(f"价格范围: {prices.min():.1f} - {prices.max():.1f} 万")
+print(f"真实规律: 房价 = 2.5 × 面积(平米) + 30")
+
+```
+
+```
+房屋数量: 100 套
+面积范围: 90.3 - 149.2 平米 (0.90 - 1.49 百平米)
+价格范围: 248.0 - 414.8 万
+真实规律: 房价 = 2.5 × 面积(平米) + 30
+```
+
+
+### 推导公式
+模型公式  
+
+$$
+\hat{y} = wx + b
+$$
+
+损失函数使用 MSE  
+
+$$
+MSE = \frac{1}{n} \sum \limits _{i=1} ^n (\hat{y_i} - y_i)^2
+$$
+
+将模型公式代入损失函数有  
+
+$$
+L(w,b) = \frac{1}{n} \sum \limits _{i=1} ^n (wx_i + b - y_i)^2
+$$
+
+通过链式法则分别对 $w , b$ 求偏导
+
+$$
+\begin{array}{c}
+	\cfrac{\partial L}{\partial w} = \cfrac{1}{n} \sum \limits _{i=1} ^{n} 2(w x_i + b - y_i) \cdot x_i \\
+	\cfrac{\partial L}{\partial b} = \cfrac{1}{n} \sum \limits _{i=1} ^{n} 2(w x_i + b - y_i) \\
+\end{array}
+$$
+
+### 手动实现
+手搓梯度下降
+```python
+def gradient_descent(X, y, lr=0.1, epochs=200):
+	# 初始化参数
+	w, b = 0.0, 0.0
+	n = len(X)
+
+	# 初始化历史记录，使用记录初始参数和损失
+	history = {'w': [w], 'b': [b], 'loss': [np.mean((w*X + b - y)**2)]}
+	
+	# 进行迭代训练，更新参数
+	for epoch in range(epochs):
+		# 计算当前预测值
+		y_pred = w * X + b
+		
+		# 计算参数 w 梯度
+		dw = (2/n) * np.sum((y_pred - y) * X)
+		# 计算参数 b 梯度
+		db = (2/n) * np.sum(y_pred - y)
+		
+		# 使用学习率更新参数
+		w -= lr * dw
+		b -= lr * db
+		
+		# 记录参数和损失
+		history['w'].append(w)
+		history['b'].append(b)
+		history['loss'].append(np.mean((y_pred - y)**2))
+		
+		# 每隔 1% 训练轮数，打印一次进度
+		if epoch % (epochs/100) == 0:
+			print(f"迭代 {epoch:3d}: w={w:.2f}, b={b:.2f}, loss={history['loss'][-1]:.2f}")
+	
+	return history
+
+history = gradient_descent(areas, prices, lr=0.01, epochs=100000)
+print(f"\n最终结果: 房价 = {history['w'][-1]/100:.3f} × 面积(平米) + {history['b'][-1]:.2f}")
+```
+
+```
+迭代   0: w=7.85, b=6.51, loss=107933.06
+...
+迭代 10000: w=232.89, b=50.30, loss=182.49
+...
+迭代 20000: w=238.09, b=44.07, loss=181.49
+...
+迭代 30000: w=238.48, b=43.61, loss=181.48
+...
+迭代 40000: w=238.50, b=43.57, loss=181.48
+...
+迭代 50000: w=238.51, b=43.57, loss=181.48
+...
+迭代 60000: w=238.51, b=43.57, loss=181.48
+...
+迭代 70000: w=238.51, b=43.57, loss=181.48
+...
+迭代 80000: w=238.51, b=43.57, loss=181.48
+...
+迭代 90000: w=238.51, b=43.57, loss=181.48
+...
+
+迭代 99000: w=238.51, b=43.57, loss=181.48
+
+最终结果: 房价 = 2.385 × 面积(平米) + 43.57
+```
+
+### 训练过程
+1. 将训练过程可视化  
+2. 忽略前 100 次迭代，避免初始值对收敛过程演示产生干扰  
+
+```python
+# 创建一个 1 行 3 列的子图布局
+fig, axes = plt.subplots(1, 3, figsize=(15, 5))
+
+# 绘制房屋数据散点图
+axes[0].scatter(areas_m2, prices, c='steelblue', s=60, alpha=0.7, label='房屋数据')
+
+# 绘制拟合曲线
+x_line = np.linspace(85, 155, 100) # 在 (85,100) 区间，生成 100 个等间距的点
+y_line = (history['w'][-1]/100) * x_line + history['b'][-1] # 计算拟合曲线的 y 值
+axes[0].plot(x_line, y_line, 'coral', lw=2, 
+             label=f'拟合: y={history["w"][-1]/100:.3f}x+{history["b"][-1]:.1f}')
+axes[0].set_xlabel('面积 (平米)', fontsize=12)
+axes[0].set_ylabel('房价 (万)', fontsize=12)
+axes[0].set_title('房价预测模型', fontsize=14)
+axes[0].legend(fontsize=10)
+axes[0].grid(True, alpha=0.3)
+
+# 跳过前 100 个迭代，避免初始值对收敛过程演示的干扰
+skip = 100
+
+### 绘制参数收敛过程
+
+# 绘制 w 目标值水平线
+axes[1].axhline(250, color='steelblue', ls='--', alpha=0.5) 
+# 绘制 w 收敛过程
+axes[1].plot(history['w'][skip:], 'steelblue', lw=2, label='w (目标: 250)')
+
+# 绘制 b 目标值水平线
+axes[1].axhline(30, color='darkorange', ls='--', alpha=0.5) 
+# 绘制 b 收敛过程
+axes[1].plot(history['b'][skip:], 'darkorange', lw=2, label='b (目标: 30)') 
+
+axes[1].set_xlabel('迭代次数', fontsize=12)
+axes[1].set_ylabel('参数值', fontsize=12)
+axes[1].set_title('参数收敛过程', fontsize=14)
+axes[1].legend(fontsize=10)
+axes[1].grid(True, alpha=0.3)
+
+# 绘制损失函数下降过程
+axes[2].plot(history['loss'][skip:], 'orangered', lw=2)
+axes[2].set_xlabel('迭代次数', fontsize=12)
+axes[2].set_ylabel('损失 (MSE)', fontsize=12)
+axes[2].set_title('损失函数下降', fontsize=14)
+axes[2].grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+```
+![](./materials/img0302TrainLog.png)
+
+1. 损失值起初迅速下降，后逐渐趋于平缓  
+2. 参数 $w$ 从 0 逐步逼近 238  
+3. 最终拟合的直线较好地拟合了大部分数据点  
+
+
+### 学习率实验
+学习率 $\eta$ 是梯度下降中最关键的超参数
+通过实验体会不同学习率的作用
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+plt.rcParams['font.sans-serif'] = ['SimHei', 'Arial Unicode MS', 'DejaVu Sans']
+plt.rcParams['axes.unicode_minus'] = False
+
+# ============ 核心逻辑 ============
+def gradient_descent(start_x, lr, n_steps=15):
+	"""在 f(x)=x² 上做梯度下降，返回每步的 x 值"""
+	trajectory = [start_x]
+	x = start_x
+	for _ in range(n_steps):
+		grad = 2 * x                # f'(x) = 2x
+		x = x - lr * grad           # 参数更新
+		trajectory.append(x)
+		if abs(x) > 500:            # 已经爆炸，提前停
+				break
+	return trajectory
+
+# ============ 四种学习率对比 ============
+x0 = 4.0
+configs = [
+	(0.05, '太小：蜗牛爬坡',     'steelblue'),
+	(0.3,  '合适：稳步收敛',     'seagreen'),
+	(0.9,  '偏大：剧烈震荡',     'orange'),
+	(1.1,  '过大：梯度爆炸',  'crimson'),
+]
+
+# ---------- 图1：参数值随迭代变化 ----------
+fig, axes = plt.subplots(2, 2, figsize=(12, 8))
+for ax, (lr, title, color) in zip(axes.flatten(), configs):
+	traj = gradient_descent(x0, lr)
+	ax.plot(range(len(traj)), traj, 'o-', color=color, markersize=5)
+	ax.axhline(y=0, color='gray', linestyle='--', alpha=0.5, label='最优点 x=0')
+	ax.set_title(f'lr={lr} — {title}', fontsize=12)
+	ax.set_xlabel('迭代次数')
+	ax.set_ylabel('参数 x')
+	ax.legend()
+	ax.grid(True, alpha=0.3)
+
+plt.suptitle('学习率对梯度下降的影响（参数变化）', fontsize=14, fontweight='bold')
+plt.tight_layout()
+plt.show()
+
+# ---------- 图2：在损失曲线上可视化轨迹 ----------
+fig, axes = plt.subplots(2, 2, figsize=(12, 8))
+x_curve = np.linspace(-8, 8, 300)
+
+for ax, (lr, title, color) in zip(axes.flatten(), configs):
+	traj = gradient_descent(x0, lr, n_steps=10)
+	# 只保留不越界的点，方便画图
+	traj_plot = [x for x in traj if abs(x) <= 10]
+
+	ax.plot(x_curve, x_curve**2, 'k-', alpha=0.2, linewidth=2)   # 损失曲线
+	ax.plot(traj_plot, [x**2 for x in traj_plot], 'o', color=color, markersize=6)
+
+	# 画箭头连接每一步
+	for i in range(len(traj_plot) - 1):
+			ax.annotate('', xy=(traj_plot[i+1], traj_plot[i+1]**2),
+									xytext=(traj_plot[i], traj_plot[i]**2),
+									arrowprops=dict(arrowstyle='->', color=color, lw=1.5))
+
+	ax.set_title(f'lr={lr} — {title}', fontsize=12)
+	ax.set_xlim(-9, 9)
+	ax.set_ylim(-5, 70)
+	ax.set_xlabel('x')
+	ax.set_ylabel('f(x) = x²')
+	ax.grid(True, alpha=0.3)
+
+plt.suptitle('学习率对梯度下降的影响（损失曲面轨迹）', fontsize=14, fontweight='bold')
+plt.tight_layout()
+plt.show()
+```
+
+对于函数 $y = x^2$  
+梯度 (导数) 是 $2x$  
+更新公式是 $x := x - lr \times 2x = x(1 - 2lr)$  
+
+function `gradient_descent()`  
+- 列表 `trajectory` 记录梯度下降过程中的 $x$ 值  
+- 若 `abs(x) > 500 `，则 `break` 迭代
+- 最终返回 `trajectory`
+
+list `configs`  
+	存放不同学习率的配置  
+1. `lr` 学习率值  
+2. `title` 绘图标题  
+3. `color` 图例颜色  
+
+![](./materials/img0303ParamChange.png)
+
+![](./materials/img0304LossTrajectory.png)
+
+1. 学习率偏小 $lr = 0.05$  
+	X 在右侧坡上慢慢下挪，10 次迭代根本无法到达谷底 ($x=0$)  
+	呈现学习率太小会导致收敛极慢  
+2. 学习率适中 $lr = 0.3$  
+	X 顺滑快速达到谷底 ($x=0$)，没有多余动作  
+3. 学习率偏大 $lr = 0.9$  
+	X 一步跨过谷底移至左侧，下步跨至右侧  
+	每次跨幅逐渐变小，最终呈 Z 字形震荡收敛至底部  
+4. 学习率巨大 $lr = 1.1$  
+X 不仅在两侧反复横跳，而且越跳越高，直接飞出画幅  
+数字呈指数级增大，这是典型的**梯度爆炸**
+
+> [!TIP]
+> 学习率的选择通常需要实验调整  
+> 常见的起始值有 `1e-2, 1e-3, 1e-4` 等
+
+## 优化算法
+标准梯度下降存在局限  
+1. 收敛速度慢  
+2. 容易陷入局部最优  
+
+业界发展如下优化  
+1. 动量法 (Momentum)  
+	借鉴物理学的惯性，给梯度添加“速度”，减少在狭长山谷中的震荡
+2. 自适应梯度 (AdaGrad)  
+	为每个参数自动维护独立的学习率  
+	适合处理稀疏数据
+3. 均方根传播 (RMSProp)  
+	对 AdaGrad 的改良，关注近期的梯度变化，避免学习率降为零  
+	适合不平稳的目标 (如 RNN)
+4. 自适应矩估计 (Adam)  
+	结合动量法的方向加速和 RMSProp 的自适应步幅  
+	同时维护梯度的方向趋势和大小变化，既快又稳  
+	收敛速度快，且对学习率不敏感  
+	是目前深度学习中最广泛使用的 **默认首选优化器**
+
+### 动量法 Momentum
+基础梯度下降只看当前这一步的坡度，容易在狭长山谷中来回震荡，走出锯齿形路线。  
+
+动量法借鉴了物理学中惯性的概念——每次更新参数时，将历史更新方向累积为一个"速度"，连续同向则加速，来回变化则相互抵消。就像小球从山坡滚下，凭借惯性能冲过小坑洼而不是卡在里面。这样做显著减少了震荡、加速了收敛，还有助于跳出局部最优。不过惯性也是双刃剑，动量过大时可能冲过最优点。  
+
+它特别适合损失曲面存在大量狭长山谷的场景，也常用于对泛化性能要求较高的计算机视觉任务——许多经典图像模型至今仍使用 SGD + Momentum 来训练。  
+
+### 自适应梯度 AdaGrad
+动量法解决了方向上的问题，但所有参数仍然共用同一个学习率。现实中有些参数频繁更新，有些参数很少被触及，一刀切显然不合理。  
+
+AdaGrad 的做法是为每个参数自动维护独立的学习率：它累积每个参数的历史梯度平方和，梯度大的参数自动减小步幅，梯度小的参数则保持较大学习率，让稀疏特征也有充分的学习机会。问题在于，历史梯度只增不减，到了训练后期所有参数的学习率都趋近于零，训练可能提前停滞。  
+
+它最擅长处理稀疏数据场景，比如自然语言处理中的词向量训练、推荐系统中的大规模稀疏特征学习，这类场景中不同特征的出现频率差异悬殊，AdaGrad 的自适应特性恰好能发挥优势。  
+
+### 均方根传播 RMSProp
+RMSProp 正是针对 AdaGrad 学习率单调衰减这一问题的改进。它用指数加权移动平均替代了简单累加，让学习率具备了遗忘能力——只关注近期的梯度变化，不再被遥远的历史拖累。  
+
+这样既保留了自适应学习率的优势，又避免了后期停滞。但它只解决了步幅问题，缺少动量机制，在方向上没有加速能力。  
+
+它特别适合非平稳目标函数的优化，比如循环神经网络（RNN）的训练，这类任务中梯度的统计特性会随时间不断变化，RMSProp 的遗忘机制能够很好地适应这种动态性。  
+
+### 自适应矩估计 Adam
+Adam 把动量的方向加速和 RMSProp 的自适应步幅结合，它同时维护两套信息——一套跟踪梯度的方向趋势（动量），一套跟踪梯度的大小变化（自适应学习率），两者结合使它既跑得快又跑得稳。它的默认超参数在绝大多数场景下直接可用，收敛快且对学习率选择不敏感。  
+
+Adam 几乎适用于所有深度学习任务，从 Transformer 语言模型到生成对抗网络，从强化学习到多模态模型，尤其在模型结构复杂、调参预算有限的情况下，它是最稳妥的选择。  
+
+### 对比总结
+
+| **算法**   | **一句话概括**               | **典型使用场景**      |
+| -------- | ----------------------- | --------------- |
+| SGD      | 最基础的版本                  | 简单问题，或搭配学习率调度策略 |
+| Momentum | 给梯度加上惯性                 | 损失面有很多狭长山谷      |
+| AdaGrad  | 给每个参数自动调学习率             | 稀疏数据 (如 NLP 词向量) |
+| RMSProp  | AdaGrad 的改良，学习率不会降到零    | RNN 等非平稳目标      |
+| Adam     | Momentum + RMSProp，全能选手 | 通用首选，深度学习默认优化器  |
+
+### 手搓 Adam
+Adam 迭代索引 (时间步) 起始为 1 而非 0，用于偏差校正
+
+```python
+def adam_optimizer(X, y, lr=0.1, epochs=200, beta1=0.9, beta2=0.999, epsilon=1e-8):
+	# 初始化参数
+	w, b = 0.0, 0.0
+	n = len(X)
+
+	# ====== Adam 特有的状态变量初始化 ======
+	m_w, v_w = 0.0, 0.0  # w 的一阶矩和二阶矩
+	m_b, v_b = 0.0, 0.0  # b 的一阶矩和二阶矩
+	# ====================================
+
+	# 初始化历史记录
+	history = {'w': [w], 'b': [b], 'loss': [np.mean((w*X + b - y)**2)]}
+	
+	# 进行迭代训练
+	for epoch in range(epochs):
+		t = epoch + 1  # Adam 的时间步 t 从 1 开始，用于偏差校正
+		
+		# 1. 计算当前预测值
+		y_pred = w * X + b
+		
+		# 2. 计算当前梯度 (这部分和普通梯度下降完全一样)
+		dw = (2/n) * np.sum((y_pred - y) * X)
+		db = (2/n) * np.sum(y_pred - y)
+		
+		# ====== Adam 核心参数更新逻辑 ======
+		# 3. 更新一阶矩估计（动量：累积历史梯度方向）
+		m_w = beta1 * m_w + (1 - beta1) * dw
+		m_b = beta1 * m_b + (1 - beta1) * db
+		
+		# 4. 更新二阶矩估计（RMSProp：累积历史梯度平方）
+		v_w = beta2 * v_w + (1 - beta2) * (dw**2)
+		v_b = beta2 * v_b + (1 - beta2) * (db**2)
+		
+		# 5. 计算偏差校正后的一阶和二阶矩（解决初期向 0 偏移的问题）
+		m_w_hat = m_w / (1 - beta1**t)
+		m_b_hat = m_b / (1 - beta1**t)
+		v_w_hat = v_w / (1 - beta2**t)
+		v_b_hat = v_b / (1 - beta2**t)
+		
+		# 6. 使用 Adam 公式更新参数
+		w -= lr * m_w_hat / (np.sqrt(v_w_hat) + epsilon)
+		b -= lr * m_b_hat / (np.sqrt(v_b_hat) + epsilon)
+		# =================================
+		
+		# 计算当前 loss
+		current_loss = np.mean((w*X + b - y)**2)
+		
+		# 记录参数和损失
+		history['w'].append(w)
+		history['b'].append(b)
+		history['loss'].append(current_loss)
+		
+		# 每隔 1% 训练轮数，打印一次进度 (防止epochs较小报错，加个max限制)
+		print_step = max(1, int(epochs / 100))
+		if epoch % print_step == 0:
+			print(f"迭代 {epoch:5d}: w={w:.4f}, b={b:.4f}, loss={current_loss:.4f}")
+	
+	return history
+
+# ====== 运行测试 ======
+history = adam_optimizer(areas, prices, lr=0.1, epochs=50000)
+
+print(f"\n最终结果: 房价 = {history['w'][-1]/100:.3f} × 面积(平米) + {history['b'][-1]:.2f}")
+```
+
+![](./materials/img0305AdamTrainLog.png)
+
+相对 SGD 过程， Adam 过程收敛速度更快  
+- SDG 在 `2e+4` 后收敛  
+- Adam 在 `2e+4` 前收敛  
+
+## 梯度下降变体
+每次更新参数需要使用多少数据计算梯度？
+
+| **维度**    | **BGD（全量）** | **Mini-batch** | **SGD（单样本）** |
+| --------- | ----------- | -------------- | ------------ |
+| 每步计算量     | 大           | 适中             | 小            |
+| 梯度准确度     | 精确          | 近似             | 噪声大          |
+| 收敛稳定性     | 很稳定         | 较稳定            | 震荡剧烈         |
+| 能否利用GPU并行 | 能           | 能且最佳          | 否            |
+| 实际使用      | 小数据集        | **主流选择**       | 很少单独使用       |
+
+> [!TIP]
+> Mini-batch 是深度学习训练的主流选择  
+
+> [!CAUTION]
+> 实际有时 SGD 指小批量梯度下降 (Mini64 / Mini128)  
+
+### 批量梯度下降 BGD
+**批量梯度下降 (Batch Gradient Descent, BGD) / 全批量**  
+
+批量梯度下降的做法最为直接——每次用全部训练数据计算梯度，然后更新一次参数，这也正是我们前面实战中所采用的方法。  
+
+由于使用了完整数据集，它计算出的梯度最为准确，更新方向也最稳定，对于凸函数而言一定能收敛到最优解。  
+
+然而，这种面面俱到的方式代价高昂：当数据量很大时（想象有100万条数据），每走一步都需要遍历整个数据集，计算开销巨大；同时它也无法进行在线学习，必须拿到所有数据后才能开始训练。  
+
+### 随机梯度下降 SGD
+**随机梯度下降 (Stochastic Gradient Descent, SGD) / 单样本**  
+
+随机梯度下降走向了另一个极端——每次只用一条随机抽取的训练数据计算梯度，然后立刻更新参数。  
+
+使得每步计算极其轻量，同时天然引入的随机性有助于模型跳出局部最优，还支持在线学习。  
+
+但仅凭单条数据估计的梯度噪声很大，更新方向不够稳定，导致收敛过程呈现剧烈震荡，整体效率反而可能受损。  
+
+### 小批量梯度下降 Mini-BGD
+**小批量梯度下降 (Mini-batch Gradient Descent, Mini-BGD)**  
+
+小批量梯度下降则是对前两者的折中。它每次随机抽取一个小批量 (mini-batch) 的数据，通常为 32、64、128 或 256 条——来计算梯度并更新参数。  
+
+既保留批量梯度下降中梯度估计相对准确、方向相对稳定的优势，又兼顾了随机梯度下降计算高效、具备一定随机性的长处。
+
+## 深度学习的基础
+传统机器学习、深度学习、大语言模型等训练和优化，都依赖梯度下降  
+**梯度下降是深度学习模型的底层逻辑**  
+
+### 反向传播
+深度神经网络或有百万级甚至十亿级参数  
+训练如此规模的网络模型，核心依赖如下步骤：
+1. 前向传播 (Forward Propagation)  
+	计算输出值和损失值  
+	输入数据，从输入层逐层至隐藏层，最终得到输出和损失值  
+2. 反向传播 (Back Propagation)  
+	利用链式法则计算梯度  
+	从损失函数出发，利用链式法则逐层计算每个参数的梯度  
+3. 梯度下降 (Gradient Descent)  
+	用算得的梯度更新所有参数
+
+> [!TIP]
+> 深度学习训练 = 反向传播 + 梯度下降
+
+### 大语言模型
+自简单的线性回归，至如今的大语言模型 (LLM)  
+机器学习的基本范式从未改变  
+1. 用数据寻找规律  
+2. 用模型表达规律  
+3. 用损失函数衡量误差  
+4. 用梯度下降优化参数  
+5. 用不断迭代更新模型  
+
+相较线性回归的梯度下降，对 LLM 的训练过程基本一致  
+只是模型规模更大  
+- 模型框架复杂 (Transformer 架构)  
+- 参数规模庞大 (千亿级别)  
+- 数据规模庞大 (全互联网)  
+- 损失函数不同 (交叉熵)  
+- 优化器更先进 (AdamW)  
+
+**核心思路一致**  
+沿着梯度方向更新参数，实现最小损失函数。
+
+
 
 # 3. 数据预处理
 
