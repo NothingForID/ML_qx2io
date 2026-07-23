@@ -18,7 +18,7 @@
 - 泛化 Generalization  
 	从有限经验中抽取规律，并在陌生环境中做出正确判断的能力  
 
-> [!TIP]
+> [!TIP]  
 > 智能 = 学习能力 + 迁移能力
 
 这就是通用人工智能 (Artificial Generalized Intelligence, AGI)  
@@ -242,7 +242,9 @@ $DL \subset ML \subset AI$
 人类一次只能处理有限的少量特征，计算机能快速分析大量特征  
 算法会为不同特征分配*权重 (Weight)*  
 
-$$得分 = (w_1 \times 周末发送) + (w_2 \times 文件超标) + (w_3 \times \text{包含免费}) + \dots$$  
+$$
+得分 = (w_1 \times 周末发送) + (w_2 \times 文件超标) + (w_3 \times \text{包含免费}) + \dots
+$$  
 
 ### 机器学习的核心问题
 如何精准确定每个特征的权重？  
@@ -514,7 +516,9 @@ $w$ 和 $b$ 是模型需要学习的参数
 	
 - 均方误差 (Mean Squared Error, MSE)  
 	
-	$$MSE = \frac{1}{n} \sum(\hat{y} - y)^2$$  
+	$$
+	MSE = \frac{1}{n} \sum(\hat{y} - y)^2
+	$$  
 
 	1. 计算每个样本的误差，即预测值与真实值的差值  
 	2. 对所有样本的误差取平方，消除正负号、缩放极端误差  
@@ -707,7 +711,7 @@ $$
 **训练模型的本质**  
 - 是搜索最佳的 $w$ 和 $b$  
 
-> [!TIP]
+> [!TIP]  
 > 训练闭环  
 > 输入数据 → 输出预测 → 计算损失 → 计算梯度 → 更新参数
 
@@ -1128,7 +1132,7 @@ list `configs`
 X 不仅在两侧反复横跳，而且越跳越高，直接飞出画幅  
 数字呈指数级增大，这是典型的**梯度爆炸**
 
-> [!TIP]
+> [!TIP]  
 > 学习率的选择通常需要实验调整  
 > 常见的起始值有 `1e-2, 1e-3, 1e-4` 等
 
@@ -1274,10 +1278,10 @@ print(f"\n最终结果: 房价 = {history['w'][-1]/100:.3f} × 面积(平米) + 
 | 能否利用GPU并行 | 能           | 能且最佳          | 否            |
 | 实际使用      | 小数据集        | **主流选择**       | 很少单独使用       |
 
-> [!TIP]
+> [!TIP]  
 > Mini-batch 是深度学习训练的主流选择  
 
-> [!CAUTION]
+> [!CAUTION]  
 > 实际有时 SGD 指小批量梯度下降 (Mini64 / Mini128)  
 
 ### 批量梯度下降 BGD
@@ -1321,7 +1325,7 @@ print(f"\n最终结果: 房价 = {history['w'][-1]/100:.3f} × 面积(平米) + 
 3. 梯度下降 (Gradient Descent)  
 	用算得的梯度更新所有参数
 
-> [!TIP]
+> [!TIP]  
 > 深度学习训练 = 反向传播 + 梯度下降
 
 ### 大语言模型
@@ -1361,7 +1365,7 @@ print(f"\n最终结果: 房价 = {history['w'][-1]/100:.3f} × 面积(平米) + 
 10. 流程封装与总结  
 
 ## 预处理的意义
-> [!CAUTION]
+> [!CAUTION]  
 >“Garbage In, Garbage Out.”  
 > 垃圾进，垃圾出  
 
@@ -2090,7 +2094,7 @@ $$
 - 缺点  
 	绝对值在零点不可导，作为损失函数在优化过程中不如平方项方便  
 	
-> [!TIP]
+> [!TIP]  
 > 它的单位和目标变量一致，是所有指标中最容易解释的。
 
 ### 均方误差 MSE
@@ -2114,17 +2118,17 @@ $$
 所以，如果你的业务场景对大偏差零容忍（比如预测偏差超过某个阈值就会造成严重后果），MSE 是更合适的优化目标。  
 不过由于平方操作，MSE 的单位变成了目标变量单位的平方，不太直观。  
 
-> [!TIP]
+> [!TIP]  
 > MSE 也是梯度下降训练时最常用的损失函数。
 
 ### 均方根误差 RMSE
 均方根误差 (Root Mean Squared Error, RMSE)  
 
 $$
-\begin{align}
+\begin{array}{c}
 RMSE & = \sqrt{MSE} \\
 & = \sqrt {\frac{1}{n} \sum \limits _{i=1} ^{n}(y_i - \hat{y_i})^2} \\
-\end{align}
+\end{array}
 $$
 
 - 核心思想  
@@ -2136,7 +2140,7 @@ $$
 把 MSE 开个根号，单位就回到和目标变量一致了。  
 既保留了 MSE 对大误差的敏感性，又方便直接解读  
 
-> [!TIP]
+> [!TIP]  
 > 在实际工程和数据科学竞赛 (Kaggle) 中，常作为回归任务的默认标准
 
 ### 决定系数 $R^2$
@@ -2200,10 +2204,10 @@ print(f"R²:   {r2:.4f}  （解释了 {r2*100:.1f}% 的方差）")
 - 残差分析能反映模型的具体优劣表现  
 
 $$
-\begin{align}
+\begin{array}{c}
 e_i & = y_i - \hat{y_i} \\
 残差值 & = 真实值 - 预测值 \\
-\end{align}
+\end{array}
 $$
 
 理想中完美模型所有的残值值均为零  
@@ -2730,9 +2734,9 @@ $$
 
 ### 使用正则化解决过拟合
 
-> [!CAUTION]
-> 在正则化之前，务必先进行标准化
-> 由于高次项的数值通常极大，若不缩放，则导致系数的惩罚不公平
+> [!CAUTION]  
+> 在正则化之前，务必先进行标准化  
+> 由于高次项的数值通常极大，若不缩放，则导致系数的惩罚不公平  
 
 ```python
 import numpy as np
@@ -2907,7 +2911,7 @@ $$
 
 ![](./materials/img0701Sigmoid.png)
 
-> [!TIP]
+> [!TIP]  
 > **逻辑回归 = 线性回归 + Sigmoid**
 
 ### Sigmoid 函数的优势
@@ -3073,11 +3077,11 @@ $$
 	$\max L(p) = L(\cfrac45) = \cfrac{4^8}{5^{10}}$   
 
 $$
-\begin{align}
+\begin{array}{c}
 L'(p) &= 8p^7 \cdot (1-p)^2 - 2p^8(1-p) \\
 &= 10p^9 -18p^8 + 8p^7 \\ 
 & = 10p^7 (p - \frac45) (p -1)
-\end{align}
+\end{array}
 $$  
 
 $$
@@ -3132,7 +3136,7 @@ $$
 令 $z = wx + b$， 逻辑回归损失函数 $L$ 对 $z$ 求导  
 
 $$
-\begin{align}
+\begin{array}{c}
 L = -[yln(\hat{y}) + (1-y)ln(1-\hat{y})]\\
 \cfrac{\partial L}{\partial \hat{y}} = -\cfrac{y}{\hat{y}}+\cfrac{1-y}{1-\hat{y}}\\
 令 z = wx +b, \quad \hat{y}  = \cfrac{1}{1+e^{-(wx+b)}} = \cfrac{1}{1+e^{-z}}\\
@@ -3142,7 +3146,7 @@ L = -[yln(\hat{y}) + (1-y)ln(1-\hat{y})]\\
 代入 \ J  = \cfrac1m \sum L\\
 \cfrac{\partial J}{\partial w}  = \frac1m \sum (\hat{y} - y) \cdot x_j\\ 
 \cfrac{\partial J}{\partial b}  = \frac1m \sum (\hat{y} - y) \\
-\end{align}
+\end{array}
 $$
 
 |              | **线性回归**                                | **逻辑回归**                                     |
@@ -3482,10 +3486,10 @@ Softmax 回归能一次性输出所有类别的概率。
 再通过 Softmax 把这些分数转成一组概率，最后选择概率最大的类别作为预测结果。  
 
 $$
-\begin{align}
+\begin{array}{c}
 Softmax(Z_i) = \dfrac{e^{Z_i}}{\sum_j e^{Z_j}} \\
 P(y=k) = \dfrac{e^{Z_k}}{\sum^K_{j=1}e^{Z_j}} \\
-\end{align}
+\end{array}
 $$
 
 如果只有 2 个类别，Softmax 就退化成了 Sigmoid，所以 Sigmoid 是 Softmax 的特例。
@@ -3632,10 +3636,10 @@ $$
 - 基尼系数越大，说明节点越乱，各类别分布越均匀。  
 
 $$
-\begin{align}
+\begin{array}{c}
 Gini(D) & = 1 - \sum \limits _{k=1}^K p_k^2 \\
 Gini(D) & = \sum \limits _{k=1}^K p_k(1 - p_k)
-\end{align}
+\end{array}
 $$
 - $D$ : 当前节点的数据集
 - $K$ : 类别总数
@@ -4075,9 +4079,9 @@ Boosting 的精髓
 梯度提升决策树 (Gradient Boosting Decision Tree, GBDT)
 
 $$
-\begin{align}
+\begin{array}{c}
 F(x) &= h_1(x) + h_2(x) + h_3(x) + \ldots \\
-\end{align}
+\end{array}
 $$
 
 与线性回归有固定维度的参数 $\theta$ 不同，GBDT 的优化方式是每轮添加一整棵新树 $h_m(x)$
@@ -4105,11 +4109,11 @@ $$
 	此时负梯度恰是残差  
 
 $$
-\begin{align}
+\begin{array}{c}
 L = \frac 1 2 (y - F(x))^2 \\
 L \, 对 \, F(x) 求导并取负号, \quad
 负梯度 =- \cfrac{\partial L}{\partial F(x)} = y - F(x) = \rm残差(residual)
-\end{align}
+\end{array}
 $$
 
 推广其他损失函数，负梯度不再是简单的残差
@@ -4498,11 +4502,11 @@ K-Means
 是一个簇内的中心位置，通常取该簇所有点在各个维度上的**均值**
 
 $$
-\begin{align}
+\begin{array}{c}
 &假设三点 A(x_a,y_a), B(x_b,y_b), C(x_c,y_c)，\\
 &则质心为
 (\cfrac{x_a+x_b+x_c}{3},\cfrac{y_a+y_b+y_c}{3}) 
-\end{align}
+\end{array}
 $$
 
 ### 距离度量
@@ -4901,7 +4905,7 @@ PCA 会找到最具代表性的对角线反映数据走势，然后将所有数�
 
 **PCA 能在缺乏医学知识的情况下，纯粹通过数据的数学结构自动发现该组合特征**  
 
-> [!TIP]
+> [!TIP]  
 > PCA 不是简单地扔掉某个特征，而是将多个相关特征融合成一个新的综合特征。  
 > 这个新特征保留了原来两个特征的大部分信息，同时消除了它们之间的冗余。  
 
@@ -4944,7 +4948,7 @@ PCA 自动分析相关性，将 6 个特征压缩成少量综合成分
 把 6 维特征压缩成 2 维，大幅降低了复杂度  
 同时业务人员也能更直观地理解这两个综合指标的含义。  
 
-> [!TIP]
+> [!TIP]  
 > PCA 通过数学方法把隐藏因子挖掘出来，用少数维度替代大量冗余特征
 
 ## PCA 的数学原理
@@ -5297,7 +5301,7 @@ plt.show()
 | 适用场景   | 业务诉求强、可解释需求  | 纯性能、特征高度相关场景        |
 | 阿里典型案例 | 用户画像、风控规则    | 图像 embedding、CTR 预估 |
 
-> [!TIP]
+> [!TIP]  
 > 先用随机森林筛掉明显无关特征，再用 PCA 做二次降维，效果往往 1+1>2
 
 ## PCA 优劣
@@ -5356,7 +5360,7 @@ plt.show()
 4. 处理拟合问题
 5. 上线监控与重训
 
-> [!TIP]
+> [!TIP]  
 > 机器学习不是算法清单，是“用数据解决问题”的完成工程方法
 
 ## 核心概念
@@ -5386,7 +5390,7 @@ plt.show()
 		学习结果，如一组权重、一棵树  
 	- 同一种算法，在不同数据上训练得到不同模型  
 
-> [!TIP]
+> [!TIP]  
 > 机器学习的第一步，是将问题翻译成“特征 → 标签”的学习任务，而非挑选算法
 
 ## 监督学习：有答案的学习
@@ -5486,7 +5490,7 @@ $$
 - $:=$ 表示计算机编程中的赋值
 - $\nabla J(\theta)$ : 损失函数 $J(\theta)$ 对 $\theta$ 的偏导数向量
 
-> [!TIP]
+> [!TIP]  
 > 训练模型 = 定义目标 + 衡量错误 + 不断调参
 
 ## 模型评估
@@ -5559,7 +5563,7 @@ GBDT 通过多棵树串行累加，每轮拟合当前模型最需要修正的方
 	- 排序提升减少偏移  
 	- 对称树推理快  
 
-> [!TIP]
+> [!TIP]  
 > 使用表格数据先建立树模型基线，通常是稳妥的起点
 
 ## 无监督学习：从无标签数据中发现结构
@@ -5610,8 +5614,8 @@ PCA 用少数主成分代表主要信息
 | 检测标签错误   | `Cleanlab`          | 人工抽检           | 数据质量遇到瓶颈       |
 | 处理类别失衡   | `imbalanced-learn`  | `class_weight` | 数据量小、任务简单      |
 
-> [!TIP]
-> 先用 `AutoGluon` / `PyCaret` 建立强健基线，再用 `Pipeline` / `Optuna` / `MLflow` 把流程工程化
+> [!TIP]  
+> 先用 `AutoGluon` / `PyCaret` 建立强健基线，再用 `Pipeline` / `Optuna` / `MLflow` 把流程工程化  
 
 ## 从机器学习到深度学习
 传统机器学习提供“从数据到模型”的完整框架，但是依赖人工设计特征  
