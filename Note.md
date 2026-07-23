@@ -1,4 +1,4 @@
-# 人工智能通识
+# 序言 人工智能通识
 
 ## 古老的梦想：会思考的机器
 
@@ -115,7 +115,7 @@ LLM 的训练目标看似简单：
 **World Lab** 致力于构建具有物理一致性的世界模型。  
 “语言智能与空间智能，如同认知的双翼，缺一不可”  
 
-# 0. 机器学习是什么
+# 前言 机器学习是什么
 
 ## 本节内容
 1. AI 的定义  
@@ -274,7 +274,7 @@ $$得分 = (w_1 \times 周末发送) + (w_2 \times 文件超标) + (w_3 \times \
 		- 可视化 `Matplotlib` / `Seaborn`  
 		- 算法库 `Scikit-learn`  
 
-# 1. 机器学习的类型
+# 01. 机器学习的类型
 
 ## 本节内容
 1. 机器学习分类引入  
@@ -420,7 +420,7 @@ $$得分 = (w_1 \times 周末发送) + (w_2 \times 文件超标) + (w_3 \times \
 3. 强化学习  
 	在动态环境中，通过**不断试错**与**奖惩机制**，学习更优决策  
 
-# 2. 线性回归
+# 02. 线性回归
 
 ## 本节内容
 1. 核心概念  
@@ -682,7 +682,7 @@ $$
 
 几乎所有机器学习和深度学习模型，都是对上述基本范式的扩展和升级  
 
-# 3. 梯度下降
+# 03. 梯度下降
 
 ## 本节内容
 1. 梯度下降核心地位
@@ -1346,7 +1346,7 @@ print(f"\n最终结果: 房价 = {history['w'][-1]/100:.3f} × 面积(平米) + 
 
 
 
-# 3. 数据预处理
+# 04. 数据预处理
 
 ## 本节内容
 1. 数据预处理的重要性  
@@ -1505,7 +1505,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-![](materials/img0301EDA.png)
+![](./materials/img0401EDA.png)
 
 ### EDA 关键发现
 | 发现                               | 处理                      |
@@ -1608,7 +1608,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-![](materials/img0302Boxplot.png)
+![](./materials/img0402Boxplot.png)
 
 1. **Age (年龄)**:  
 	- 大部分乘客集中在 20-40 岁之间（箱体部分）  
@@ -1975,7 +1975,7 @@ print("预处理流水线搭建成功！生成的矩阵形状:", X_train_ready.s
 4. **Pipeline 封装**  
    将预处理、特征工程和模型训练封装为流水线，确保流程可复用、无泄露、易部署  
 
-# 4. 模型评估
+# 05. 模型评估
 
 ## 本节内容
 1. 评估模型的必要性  
@@ -2245,7 +2245,7 @@ print(f"残差标准差: {residuals.std():.4f}")
 print(f"残差偏度: {pd.Series(residuals).skew():.4f}")
 ```
 
-![](materials/img0401Residual.png)
+![](./materials/img0501Residual.png)
 
 ### 预测值与真实值对比图
 - 理想情况  
@@ -2359,7 +2359,7 @@ for metric in ['rmse', 'mae', 'r2']:
 	- R² 只有 0.61  
 	- 模型可能 **没有充分挖掘数据中的信息** ，即**欠拟合**  
 
-# 5. 拟合诊断
+# 06. 拟合诊断
 
 ## 本节内容
 1. 目标与泛化能力  
@@ -2489,7 +2489,7 @@ plt.savefig('fitting_comparison.png', dpi=150)
 plt.show()
 ```
 
-![](materials/img0501FittingComparsion.png)
+![](./materials/img0601FittingComparsion.png)
 
 - 图 1 欠拟合  
 	使用 $y = wx+b$  
@@ -2547,7 +2547,7 @@ plt.tight_layout()  # 自动调整子图间距
 plt.show()
 ```
 
-![](materials/img0502LearningRate.png)
+![](./materials/img0602LearningRate.png)
 
 - **图 1**  
 	验证误差始终和训练误差非常接近，且都维持在高位 (约 20~100)  
@@ -2823,7 +2823,7 @@ plt.show()
 
 ```
 
-![](materials/img0503Regularization.png)
+![](./materials/img0603Regularization.png)
 
 1. 拟合曲线表现  
 	- 普通线性回归  
@@ -2856,7 +2856,7 @@ plt.show()
 - **深度学习** 的本质是将多个线性回归通过非线性函数层层相连；
 - 即便是 **大语言模型**，其核心运算依然可以理解为多元线性回归的大规模批量处理。
 
-# 6. 逻辑回归
+# 07. 逻辑回归
 
 ## 本节内容
 1. 分类问题与线性回归的局限
@@ -2898,14 +2898,14 @@ Sigmoid 函数
 将线性回归的输出映射为 $(0,1)$ 的概率值  
 
 $$
-\begin{align}
+\begin{array}{c}
 z  = wx + b\\
 \sigma(z) = \cfrac{1}{1+e^{-z}}\\
 \hat{y} = \dfrac{1}{1+e^{-(wx + b)}}\\
-\end{align}
+\end{array}
 $$
 
-![](materials/img0601Sigmoid.png)
+![](./materials/img0701Sigmoid.png)
 
 > [!TIP]
 > **逻辑回归 = 线性回归 + Sigmoid**
@@ -2923,7 +2923,7 @@ $$
 	相比阶跃函数， Sigmoid 连续平滑  
 	导数公式简洁 $\sigma'(z) = \sigma(z) \cdot (1-\sigma(z))$，极大提升梯度下降效率  
 
-	![](materials/img0602StepFunction.png)
+	![](./materials/img0702StepFunction.png)
 
 
 ## 逻辑回归损失函数
@@ -2933,12 +2933,12 @@ $$
 - 线性回归 + MSE = 凸函数  
 	不论初始参数如何，通过梯度下降都能找到全局最优解  
 
-	![](materials/img0603LInearMSE.png)  
+	![](./materials/img0703LInearMSE.png)  
 	
 - 逻辑回归 + MSE = 非凸函数  
 	引入非线性 Sigmoid 后，损失函数不再单调，会陷入**局部最优**，且存在 **梯度消失** 问题  
 
-	![](materials/img0604LogicalMSE.png)
+	![](./materials/img0704LogicalMSE.png)
 
 	1. 局部最优  
 		红蓝二点分别代表左右出发遇到的局部最小值或平缓区域  
@@ -2946,7 +2946,7 @@ $$
 	2. 梯度消失  
 		Sigmoid 函数的输入值极大或极小时，输出值会逼近 1 或 0  
 
-		![](materials/img0601Sigmoid.png)  
+		![](./materials/img0701Sigmoid.png)  
 
 		如果预测值接近 1，那么梯度 $\hat{y} \cdot (1 -\hat{y})$ 就会接近 0  
 		此时即使预测错误，梯度也接近于 0，导致参数不会更新，模型停止学习，发生 **梯度消失**  
@@ -2979,7 +2979,7 @@ $$
   1. 以自然常数 $e \approx 2.718$ 为底	
   2. 通常记作 $ln(x)$ 或者写作 $log(x)$  
 
-![](materials/img0605NaturalLogarithm.png)  
+![](./materials/img0705NaturalLogarithm.png)  
 
 1. 单调性一致  
 	对数函数是单调递增的  
@@ -3125,7 +3125,7 @@ $$
 无论初始权重在哪里，梯度都不会消失，  
 在远离最优解的地方，梯度反而很大，能够引导模型快速且稳定地收敛到全局最优点。  
 
-![](materials/img0606CrossEntropyLoss.png)  
+![](./materials/img0706CrossEntropyLoss.png)  
 
 ## 梯度下降
 由于 $\hat{y} = \dfrac{1}{1+e^{-(wx + b)}}$ 包含 $w,b$，因此不论对权重 $w$ 或偏置 $b$ 求导，过程都绕不开对 $\hat{y}$ 求导  
@@ -3276,7 +3276,7 @@ print('    两组分布分离越明显，说明模型区分能力越强。')
 
 ```
 
-![](materials/img0607PredictionDistribution.png)
+![](./materials/img0707PredictionDistribution.png)
 
 - **红色（恶性）**：概率值大多集中在 0 附近，说明模型正确地将大部分恶性样本预测为低良性概率  
 - **蓝色（良性）**：概率值大多集中在 1 附近，说明模型正确地将大部分良性样本预测为高良性概率  
@@ -3344,7 +3344,7 @@ print(f'TP={tp}  FP={fp}  FN={fn}  TN={tn}')
 
 ```
 
-![](materials/img0608ConfusionMatrix.png)
+![](./materials/img0708ConfusionMatrix.png)
 
 **结果分析**
 - 对角线上的数字越大越好，代表预测正确的样本数
@@ -3450,7 +3450,7 @@ plt.show()
 print(f'AUC = {roc_auc:.4f}')
 ```
 
-![](materials/img0609AUC_ROC.png)
+![](./materials/img0709AUC_ROC.png)
 
 **结果分析**  
 - AUC 接近 **1.0**，ROC 曲线紧贴左上角，说明模型在任意阈值下都能较好地区分恶性和良性
@@ -3520,7 +3520,7 @@ $$
 4. **分类问题不能只看准确率**，要根据业务场景选择 Precision / Recall / F1
 5. 逻辑回归虽然简单，但**可解释性强、训练快、不容易过拟合**，工业界依然大量使用
 
-# 7. 决策树
+# 08. 决策树
 
 ## 本节内容
 1. 直观分类算法
@@ -3557,7 +3557,7 @@ $$
 决策树的核心思想  
 	通过一系列“如果...那么...”的判断，逐步得出结论的过程
 
-![](materials/img0701DecisionTree.svg)
+![](./materials/img0801DecisionTree.svg)
 
 ## 决策树
 - 决策树 Decision Tree  
@@ -3730,7 +3730,7 @@ tree.plot_tree(clf,
                rounded=True)
 plt.show()
 ```
-![](materials/img0702TreePlot.png)
+![](./materials/img0802TreePlot.png)
 
 节点信息解读
 - `samples` : 该节点包含的总样本数
@@ -3825,7 +3825,7 @@ plt.show()
 	2. XGBoost
 	3. LightGBM
 
-# 8. 随机森林
+# 09. 随机森林
 
 ## 本节内容
 1. 决策树的优劣
@@ -3986,7 +3986,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-![](materials/img0801FeatureImportance.png)
+![](./materials/img0901FeatureImportance.png)
 
 ## 总结优劣
 - 随机森林的优点  
@@ -4018,7 +4018,7 @@ plt.show()
 2. LightGBM  
 3. CatBoost  
 
-# 9. Boosting模型
+# 10. Boosting模型
 
 ## 本节内容
 1. Boosting 模型与集成学习
@@ -4059,7 +4059,7 @@ Bagging 思想指导随机森林过程，又称 **自举聚集** (Bootstrap Aggr
 	2. LightGBM
 	3. CatBoost
 
-![](materials/img0901Golf.png)
+![](./materials/img1001Golf.png)
 
 Boosting 的精髓  
 	**每个新模型都在拟合前面模型的残差（错误），接力合作，逐步逼近真实答案。**  
@@ -4180,7 +4180,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-![](img0902GBDTregression.png)
+![](./materials/img1002GBDTregression.png)
 
 每棵新树都在查漏补缺，模型一轮比一轮精准
 - 第 1~3 棵树  
@@ -4214,7 +4214,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-![](materials/img0903GBDTresidual.png)
+![](./materials/img1003GBDTresidual.png)
 
 Boosting 逐步纠错的过程:  
 	残差（橙色散点）逐轮向零线收敛  
@@ -4436,7 +4436,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-![](materials/img0904XGBoostTrain.png)
+![](./materials/img1004XGBoostTrain.png)
 
 会看到验证集的 RMSE 先快速下降，然后趋于平缓，最终可能略微上升（过拟合的信号），Early Stopping 恰好在最低点附近停下来。
 
@@ -4460,7 +4460,7 @@ plt.show()
 
 在实际工作中，面对结构化的表格数据，GBDT 家族（尤其是 XGBoost 和 LightGBM）几乎是默认的首选方案，它们在无数 Kaggle 竞赛和工业场景中证明了自己的实力。
 
-# 10. K-Means 聚类
+# 11. K-Means 聚类
 无监督学习让数据物以类聚
 
 ## 本节内容
@@ -4593,7 +4593,7 @@ plt.show()
 
 ```
 
-![](img1001InitialData.png)
+![](./materials/img1101InitialData.png)
 
 ### 初始化中心
 
@@ -4611,7 +4611,7 @@ plt.show()
 
 ```
 
-![](materials/img1002InitialCentroids.png)
+![](./materials/img1102InitialCentroids.png)
 
 ### 逐轮迭代
 
@@ -4650,7 +4650,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-![](materials/img1003Iteration.png)
+![](./materials/img1103Iteration.png)
 
 复现过程与[原作笔记演示](https://www.yuque.com/qx2io/machine-learning/gt0x5gv29g7t4alv#PUZHp)不同，仅迭代5次完成收敛
 
@@ -4674,7 +4674,7 @@ K-Means 一大问题是如何预先指定簇数 K 效率更高
 
 **斜率显著减小、曲线趋于平缓的拐点** 称为肘部，是 K 值的较优选择  
 
-![](materials/img1004ElbowMethod.png)
+![](./materials/img1104ElbowMethod.png)
 
 ### 可视化
 结合 K-Means++ 和肘部法则优化
@@ -4728,7 +4728,7 @@ print(f"迭代次数: {kmeans.n_iter_}")
 
 ```
 
-![](materials/img1005KMeans++Elbow.png)
+![](./materials/img1105KMeans++Elbow.png)
 
 - SSE: 362.47
 - 迭代次数: 3
@@ -4781,7 +4781,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-![](materials/img1007CompressedImg.png)
+![](./materials/img1107CompressedImg.png)
 
 ## 总结优劣
 优点  
@@ -4828,7 +4828,7 @@ plt.show()
 	通过计算节点之间的距离，自底向上 (或自顶向下)构建一棵 **聚类树**  
 	适合需要多层次分类的场景  
 
-# 11. PCA 降维
+# 12. PCA 降维
 
 ## 本节内容
 1. PCA 与 离散问题
@@ -4880,20 +4880,20 @@ plt.show()
 PCA 就是在数学空间寻找最佳角度的算法，最大程度展示全貌  
 这些角度即所谓的主成分  
 
-![](materials/img1101teapot.png)
+![](./materials/img1201teapot.png)
 
 ### 身高体重示例
 假设构建一个健康风险预测模型，数据集中有身高和体重两个特征  
 把这批数据画到二维坐标系上，横轴是身高，纵轴是体重  
 
-![](materials/img1102HWrelationship.png)
+![](./materials/img1202HWrelationship.png)
 
 - 身高越高，体重往往越重  
 - 数据点大致自左下至右上的对角线排布  
 
 身高与体重这两个特征存在强烈的 **正相关关系**，携带重叠的信息  
 
-![](materials/img1103HWproject.png)
+![](./materials/img1203HWproject.png)
 
 PCA 会找到最具代表性的对角线反映数据走势，然后将所有数据点投影到该线上  
 - 投影之后，每人只需一个特征数值就能表示，即从二维降至一维  
@@ -4958,7 +4958,7 @@ PCA 自动分析相关性，将 6 个特征压缩成少量综合成分
 PCA 的底层逻辑建立在协方差矩阵和特征值分解的基础上。  
 假设有数据集矩阵 $X$ ，包含样本 $n$ 个，特征 $d$ 个，即矩阵大小为 $n \times d$ ，将其降维至 $k$ 维
 
-![](materials/img1104PCAstep.png)
+![](./materials/img1204PCAstep.png)
 
 #### 数据去中心化
 将每个特征的数据进行去中心化处理，即减去该特征均值，处理后新的均值为零  
@@ -5285,7 +5285,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-![](materials/img1105Scree&Projection.png)
+![](./materials/img1205Scree&Projection.png)
 
 ## 随机森林对比PCA
 
@@ -5317,7 +5317,7 @@ plt.show()
 3. 对异常值敏感  
 	异常值会显著影响方差的计算  
 
-# 12. 机器学习总结
+# 结语 机器学习总结
 
 ## 本节内容
 1. 机器学习全貌
