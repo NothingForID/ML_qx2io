@@ -96,9 +96,13 @@
       DIR = "../data"
       data = fetch_california_housing(data_home = DIR, download_if_missing=False)
 
-      # --- 2. 手工将数据移东至默认路径 ---
+      # --- 2. 手工将数据移动至默认路径 ---
       from sklearn.datasets import get_data_home
       print(get_data_home()) # 获取 SCIKIT_LEARN_DATA 路径
       ```
 - 原作其他博客  
   https://juejin.cn/user/237150240001639/posts
+
+- 欢迎留言讨论  
+  若有复现问题或者学习心得，欢迎移步 [Discussions](https://github.com/NothingForID/ML_qx2io/discussions) 留言进行交流分享
+  
