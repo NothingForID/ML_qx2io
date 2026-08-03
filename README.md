@@ -1,10 +1,10 @@
 # 项目简介 Introduction
-关于 谦行Aling (qx2io) 制作的《机器学习》系列视频的学习笔记以及复现代码  
+关于 谦行Aling 制作的《机器学习》系列视频的学习笔记以及复现代码  
 
 > - 内容链接 Source:  
 >   https://space.bilibili.com/291215958/lists/7468039  
 > - 内容作者 Author:  
->   [谦行Aling](https://github.com/qx2io)  
+>   [谦行Aling](https://space.bilibili.com/291215958)  
 > - 发布时间 Release:   
 >   2026.02 - 2026.05
 
@@ -26,22 +26,22 @@
   14. [PCA 主成分分析，机器学习的最后一个模型](https://www.bilibili.com/video/BV1YMoDBuEm2/)
   15. [机器学习课程总结与深度学习展望](https://www.bilibili.com/video/BV1GsofB8Eej/)
 
-- [文档目录 Documents](https://www.yuque.com/qx2io/machine-learning)
-  1. [智能是什么、从何而来](https://www.yuque.com/qx2io/machine-learning/hc2wiugnucpryfgg)
-  2. [什么是机器学习](https://www.yuque.com/qx2io/machine-learning/lw4ycvt11803qu84)
-  3. [机器学习类型](https://www.yuque.com/qx2io/machine-learning/cfzp9g3uga9azcux)
-  4. [线性回归](https://www.yuque.com/qx2io/machine-learning/ae9tduy1ixmry3yl)
-  5. [梯度下降](https://www.yuque.com/qx2io/machine-learning/drrieqsqls94gz6n)
-  6. [数据预处理](https://www.yuque.com/qx2io/machine-learning/qiiexxntlhcdklt2)
-  7. [模型评估](https://www.yuque.com/qx2io/machine-learning/vcqzedxf0slg89sq)
-  8. [欠拟合与过拟合](https://www.yuque.com/qx2io/machine-learning/xi3329io7sg1zor1)
-  9. [逻辑回归](https://www.yuque.com/qx2io/machine-learning/ewwg2w1drdc460i5)
-  10. [决策树](https://www.yuque.com/qx2io/machine-learning/nng8aecfuponryus)
-  11. [随机森立](https://www.yuque.com/qx2io/machine-learning/rqfyegube8yg6tkh)
-  12. [Boosting 模型](https://www.yuque.com/qx2io/machine-learning/bbldhagiyeszmnd0)
-  13. [K-Means 聚类](https://www.yuque.com/qx2io/machine-learning/gt0x5gv29g7t4alv)  
-  14. [PCA 降维](https://www.yuque.com/qx2io/machine-learning/dpyabrm468qh1z05)  
-  15. [机器学习总结](https://www.yuque.com/qx2io/machine-learning/fucmye3a4q6di1bz)  
+- [笔记目录 Note Contents]
+  1. 人工智能通识
+  2. 机器学习是什么
+  3. 机器学习的类型
+  4. 线性回归
+  5. 梯度下降
+  6. 数据预处理
+  7. 模型评估
+  8. 拟合诊断
+  9. 逻辑回归
+  10. 决策树
+  11. 随机森林
+  12. Boosting 模型
+  13. K-Means 聚类
+  14. PCA 降维
+  15. 机器学习总结
 
 - 仓库结构
   ```
@@ -68,8 +68,8 @@
 # 轻量指南 Simple Guide
 - 快速开始
   ```
-  git clone https://github.com/NothingForID/ML_qx2io.git
-  cd ML_qx2io
+  git clone https://github.com/NothingForID/Machine_Learing.git
+  cd Machine_Learning
   conda env create -f environment.yml -n aling
   conda activate aling
   conda env list
